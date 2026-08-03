@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Gunnu ❤️</title>
+    <title>A Surprise For Rishika ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&family=Sacramento&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --bg-color: #0b0308;
-            --card-bg: rgba(255, 42, 95, 0.08);
-            --neon-pink: #ff2a5f;
-            --accent-purple: #9a4dff;
+            --bg-color: #fcf6f0;
+            --card-bg: #fffbf7;
+            --text-color: #5c4033;
+            --accent-pink: #e8a0bf;
+            --soft-gold: #d4af37;
         }
 
         body {
             background-color: var(--bg-color);
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
@@ -25,164 +28,337 @@
             overflow-x: hidden;
         }
 
-        .container {
+        .screen {
+            display: none;
             width: 90%;
-            max-width: 420px;
-            background: rgba(18, 7, 15, 0.95);
-            border: 2px solid var(--neon-pink);
-            box-shadow: 0 0 25px rgba(255, 42, 95, 0.4);
-            border-radius: 25px;
-            padding: 25px;
+            max-width: 380px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             text-align: center;
             box-sizing: border-box;
-            margin: 20px 0;
-            animation: fadeIn 0.8s ease-in-out;
+            animation: fadeIn 0.6s ease-in-out;
+            position: relative;
         }
 
+        .active { display: block; }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h1, h2, h3 {
-            color: var(--neon-pink);
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(255, 42, 95, 0.5);
+        h1, h2, .cursive {
+            font-family: 'Great Vibes', cursive;
+            color: var(--text-color);
+            margin: 10px 0;
         }
 
-        input {
-            width: 80%;
-            padding: 12px;
-            border-radius: 15px;
-            border: 1px solid var(--neon-pink);
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            font-size: 1.1rem;
-            text-align: center;
-            margin: 15px 0;
-            outline: none;
-        }
+        h2 { font-size: 2.2rem; }
+        .sub-header { font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; opacity: 0.7; }
 
-        button {
-            padding: 12px 30px;
-            background: linear-gradient(45deg, var(--neon-pink), var(--accent-purple));
-            border: none;
+        /* Keypad Styling */
+        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+        .key { background: #fff; border: 1px solid #eadcd0; padding: 15px; border-radius: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .key:active { background: var(--accent-pink); color: #fff; }
+
+        /* Buttons */
+        .btn-custom {
+            background: #d98880;
             color: white;
-            font-size: 1rem;
-            font-weight: bold;
+            border: none;
+            padding: 12px 25px;
             border-radius: 25px;
+            font-size: 0.9rem;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 42, 95, 0.5);
-            transition: 0.3s;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(217, 136, 128, 0.3);
+            transition: 0.2s;
         }
+        .btn-custom:active { transform: scale(0.95); }
 
-        button:active {
-            transform: scale(0.95);
+        /* Polaroid Frame */
+        .polaroid {
+            background: white;
+            padding: 12px 12px 25px 12px;
+            border-radius: 4px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            margin: 15px auto;
+            position: relative;
         }
+        .polaroid img { width: 100%; border-radius: 2px; height: 260px; object-fit: cover; }
+        .polaroid-caption { font-family: 'Sacramento', cursive; font-size: 1.6rem; margin-top: 10px; }
 
-        .gallery {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-top: 25px;
-        }
+        /* Cake Screen */
+        .cake-container { position: relative; margin: 30px auto; width: 180px; cursor: pointer; }
+        .cake { width: 100%; height: auto; }
+        .flame { width: 12px; height: 20px; background: orange; border-radius: 50%; position: absolute; top: -15px; animation: flicker 0.5s infinite alternate; }
+        @keyframes flicker { 0% { opacity: 0.8; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1.1); } }
 
-        .photo-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 42, 95, 0.3);
-            border-radius: 18px;
-            padding: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
+        /* Balloons */
+        .balloon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .balloon-box { height: 90px; background: #fdf0ed; border-radius: 15px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-weight: bold; border: 1px dashed var(--accent-pink); transition: 0.3s; }
 
-        .photo-card img {
-            width: 100%;
-            border-radius: 12px;
-            display: block;
-            object-fit: cover;
-        }
+        /* Letter Box */
+        .letter-box { background: #fffdfa; border: 1px solid #e5d9c5; padding: 20px; border-radius: 10px; text-align: left; margin: 15px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .letter-box ul { list-style-type: none; padding-left: 0; margin: 0; }
+        .letter-box li { margin-bottom: 12px; font-size: 0.85rem; padding-left: 20px; position: relative; }
+        .letter-box li::before { content: "✨"; position: absolute; left: 0; top: -2px; font-size: 0.9rem; }
+        
+        /* Scratch Card */
+        .canvas-container { position: relative; width: 260px; height: 180px; margin: 15px auto; }
+        canvas { position: absolute; top: 0; left: 0; border-radius: 15px; cursor: pointer; touch-action: none; }
+        .scratch-content { width: 100%; height: 100%; background-size: cover; background-position: center; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; text-align: center; font-size: 0.85rem; padding: 10px; box-sizing: border-box; }
 
-        .photo-card p {
-            margin: 10px 0 5px 0;
-            font-size: 0.95rem;
-            color: #ffd1dc;
-            line-height: 1.4;
-        }
+        /* Quiz */
+        .quiz-option { background: #fff; border: 1px solid #eeded2; padding: 12px; border-radius: 15px; margin: 8px 0; text-align: left; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
+        .quiz-option:active { background: #fdf0ed; transform: scale(0.98); }
 
-        .letter {
-            text-align: left;
-            background: rgba(255, 42, 95, 0.05);
-            padding: 15px;
-            border-radius: 15px;
-            border-left: 3px solid var(--neon-pink);
-            margin: 20px 0;
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
+        /* Slider */
+        .slider img { width: 100%; height: 260px; object-fit: cover; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="lockscreen" class="container">
-        <h2>Hey Gunnu! ✨</h2>
-        <p style="color: #ccc;">A special surprise is waiting for you...<br>Enter your secret passcode below!</p>
-        <input type="password" id="passInput" placeholder="Passcode">
-        <br>
-        <button onclick="unlock()">UNLOCK 🔒</button>
+    <!-- SCREEN 1: LOCK SCREEN -->
+    <div id="s1" class="screen active">
+        <div class="sub-header">🔒 A SURPRISE AWAITS</div>
+        <div class="polaroid" style="width: 180px; padding: 10px 10px 15px 10px;">
+            <img src="Snapchat-1673317709.jpg" style="height: 180px;">
+            <div class="polaroid-caption">Rishika</div>
+        </div>
+        <p style="font-size: 0.8rem; opacity: 0.8;">Enter the secret code to unlock 🗝️</p>
+        <div id="passDots" style="letter-spacing: 5px; font-size: 1.2rem; margin-bottom: 10px;">⚪ ⚪ ⚪ ⚪</div>
+        <div class="keypad">
+            <div class="key" onclick="press('1')">1</div><div class="key" onclick="press('2')">2</div><div class="key" onclick="press('3')">3</div>
+            <div class="key" onclick="press('4')">4</div><div class="key" onclick="press('5')">5</div><div class="key" onclick="press('6')">6</div>
+            <div class="key" onclick="press('7')">7</div><div class="key" onclick="press('8')">8</div><div class="key" onclick="press('9')">9</div>
+            <div class="key" onclick="press('C')">C</div><div class="key" onclick="press('0')">0</div><div class="key" onclick="checkPass()">ok</div>
+        </div>
     </div>
 
-    <div id="mainscreen" class="container" style="display: none;">
-        <h2>Happy Birthday, Gunnu! 🎉❤️</h2>
-        <p style="color: #ffb3c6; font-size: 0.9rem;">The most beautiful girl in the world!</p>
+    <!-- SCREEN 2: GREETING -->
+    <div id="s2" class="screen">
+        <div class="sub-header">TODAY IS YOUR DAY</div>
+        <h2>Rishika</h2>
+        <h3 style="font-weight: 300;">Happy Birthday 🎂</h3>
+        <p>🎀 ❤️ 🌸</p>
+        <button class="btn-custom" onclick="nextScreen(3)">Continue ✨</button>
+    </div>
 
-        <div class="letter">
-            <p>Pata hai Gunnu, tum mere liye kitni special ho? Tum sirf meri best friend nahi ho, tum meri poori duniya ho!</p>
-            <p>Tumhara bubbly nature, tumhari smile, aur jab main chup baithta hoon toh tumhara mujhe tease karna... ye sab meri life ke sabse best moments hain.</p>
-            <p>Hum dono ka gussa, hamari baatein, aur yahan tak ki hum dono ka chashma aur eye-power tak same hai! 😉 Always stay happy because tumhari khushi hi meri khushi hai! 💕</p>
+    <!-- SCREEN 3: CAKE BLOW -->
+    <div id="s3" class="screen">
+        <h2 id="cakeText">Blow the candles! 💨</h2>
+        <p style="font-size: 0.8rem;" id="cakeSub">Tap anywhere to blow</p>
+        <div class="cake-container" onclick="blowCandle()">
+            <div class="flame" id="flame1" style="left: 70px;"></div>
+            <div class="flame" id="flame2" style="left: 85px;"></div>
+            <div class="flame" id="flame3" style="left: 100px;"></div>
+            <img src="https://cdn-icons-png.flaticon.com/512/2682/2682446.png" class="cake">
         </div>
+        <button id="cakeNextBtn" class="btn-custom" style="display:none;" onclick="nextScreen(4)">Next Surprise 🎈</button>
+    </div>
 
-        <h3>Our Sweet Memories 📸</h3>
-
-        <div class="gallery">
-            <div class="photo-card">
-                <img src="1000005509.jpg" alt="Memory 1">
-                <p>Always smiling & bubbly Gunnu! ✨</p>
-            </div>
-
-            <div class="photo-card">
-                <img src="1000005510.jpg" alt="Memory 2">
-                <p>The cutest person ever ❤️</p>
-            </div>
-
-            <div class="photo-card">
-                <img src="1000005511.jpg" alt="Memory 3">
-                <p>Unforgettable moments together 💫</p>
-            </div>
-
-            <div class="photo-card">
-                <img src="1000005513.png" alt="Memory 4">
-                <p>My best friend forever 👭</p>
-            </div>
-
-            <div class="photo-card">
-                <img src="1000005514.jpg" alt="Memory 5">
-                <p>Stay bright & beautiful always! 💖</p>
-            </div>
+    <!-- SCREEN 4: BALLOONS -->
+    <div id="s4" class="screen">
+        <h3>Pop every balloon, Rishika! 🎈</h3>
+        <p style="font-size: 0.8rem; opacity: 0.7;">A secret word hides inside each one</p>
+        <p id="popCount" style="font-weight: bold; font-size: 0.8rem;">0 / 4 popped</p>
+        <div class="balloon-grid">
+            <div class="balloon-box" onclick="pop(this, 'You')">🎈</div>
+            <div class="balloon-box" onclick="pop(this, 'Are')">🎈</div>
+            <div class="balloon-box" onclick="pop(this, 'So')">🎈</div>
+            <div class="balloon-box" onclick="pop(this, 'Special')">🎈</div>
         </div>
+        <h2 id="finalBalloonText" class="cursive" style="display:none;">You Are So Special 💖</h2>
+        <button id="balNextBtn" class="btn-custom" style="display:none;" onclick="nextScreen(5)">Continue ✨</button>
+    </div>
+
+    <!-- SCREEN 5: POLAROID -->
+    <div id="s5" class="screen">
+        <div class="polaroid">
+            <img src="Snapchat-508659567.jpg">
+            <div class="polaroid-caption">Rishika ✨</div>
+        </div>
+        <h3 class="cursive">Happy Birthday Rishika! 🎉</h3>
+        <p>🥳 🎊 💖 ✨ 🎈</p>
+        <button class="btn-custom" onclick="nextScreen(6)">Continue ✨</button>
+    </div>
+
+    <!-- SCREEN 6: LETTER (THE MISSING PAGE ADDED) -->
+    <div id="s6" class="screen">
+        <div class="sub-header">A LETTER JUST FOR YOU 💌</div>
+        <h3 class="cursive" style="margin-bottom: 5px;">all the reasons</h3>
+        <p style="font-size: 0.8rem; color: #d98880; font-style: italic; margin-top: 0;">you are my favourite person, Rishika</p>
+        
+        <div class="letter-box">
+            <ul>
+                <li>the way your laugh fills every room with warmth</li>
+                <li>how you make ordinary days feel like celebrations</li>
+                <li>your cute eyes that hold entire galaxies of kindness</li>
+                <li>how you share every single secret with me and hide nothing</li>
+                <li>how completely and unconditionally you love the people you love</li>
+            </ul>
+            <p style="text-align: right; font-family: 'Great Vibes', cursive; font-size: 1.2rem; color: #d98880; margin-top: 15px;">with love, Tejas 🌿</p>
+        </div>
+        <button class="btn-custom" onclick="nextScreen(7)">Continue ✨</button>
+    </div>
+
+    <!-- SCREEN 7: SCRATCH CARD -->
+    <div id="s7" class="screen">
+        <div class="sub-header">SCRATCH TO DISCOVER</div>
+        <h3 class="cursive">something beautiful</h3>
+        <p style="font-size: 0.75rem;">is hiding beneath the surface</p>
+        <div class="canvas-container">
+            <div class="scratch-content" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('Snapchat-665326094.jpg');">
+                "You are someone's entire reason to smile every single day ✨"<br><br><b>JUST FOR RISHIKA</b>
+            </div>
+            <canvas id="scratchCanvas" width="260" height="180"></canvas>
+        </div>
+        <button class="btn-custom" onclick="nextScreen(8)">Continue ✨</button>
+    </div>
+
+    <!-- SCREEN 8: QUIZ -->
+    <div id="s8" class="screen">
+        <div class="sub-header" id="qNum">QUESTION 1 OF 3</div>
+        <h3 id="qText" style="font-size: 1.1rem; margin: 20px 0;">Where did we first meet?</h3>
+        <div id="quizOpts">
+            <div class="quiz-option" onclick="qAns()">A. School</div>
+            <div class="quiz-option" onclick="qAns()">B. Instagram</div>
+            <div class="quiz-option" onclick="qAns()">C. College</div>
+            <div class="quiz-option" onclick="qAns()">D. Apne mohalle me</div>
+        </div>
+    </div>
+
+    <!-- SCREEN 9: MEMORY SLIDER -->
+    <div id="s9" class="screen">
+        <h2 class="cursive">Our Memories</h2>
+        <p style="font-size: 0.8rem;">for Rishika ✨</p>
+        <div class="polaroid">
+            <div class="slider">
+                <img id="slideImg" src="Snapchat-1673317709.jpg">
+            </div>
+            <div class="polaroid-caption" style="font-size: 1.2rem;">this one — this is my favourite ✨</div>
+        </div>
+        <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 15px;">👈 Tap to slide 👉</p>
+        <button class="btn-custom" onclick="prevImg()" style="padding: 10px 15px; font-size: 0.8rem;">Previous</button>
+        <button class="btn-custom" onclick="nextImg()" style="padding: 10px 15px; font-size: 0.8rem;">Next</button>
     </div>
 
     <script>
-        function unlock() {
-            var input = document.getElementById("passInput").value;
-            // Password set to 2508
-            if(input === "2508") {
-                document.getElementById("lockscreen").style.display = "none";
-                document.getElementById("mainscreen").style.display = "block";
-                window.scrollTo(0, 0); // Scroll to top when unlocked
-            } else {
-                alert("Oops! Wrong password bestie. Try again! 😉");
+        // Passcode Logic
+        let inputPass = "";
+        function press(num) {
+            if(num === 'C') { inputPass = ""; }
+            else if(inputPass.length < 4) { inputPass += num; }
+            document.getElementById("passDots").innerText = "⚫ ".repeat(inputPass.length) + "⚪ ".repeat(4 - inputPass.length);
+        }
+
+        function checkPass() {
+            if(inputPass === "2508") { nextScreen(2); }
+            else { alert("Oops! Wrong code cutie. Try again! 😉"); inputPass = ""; press(''); }
+        }
+
+        // Screen Navigation
+        function nextScreen(n) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('s' + n).classList.add('active');
+            window.scrollTo(0, 0);
+            if(n === 7) initScratch(); // Trigger Scratch canvas only when Screen 7 opens
+        }
+
+        // Cake Blow Animation
+        function blowCandle() {
+            document.querySelectorAll('.flame').forEach(f => f.style.display = 'none');
+            document.getElementById('cakeText').innerText = "Happy Birthday!";
+            document.getElementById('cakeSub').innerText = "Your wish is already coming true ✨";
+            document.getElementById('cakeNextBtn').style.display = 'inline-block';
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        }
+
+        // Balloon Pop Logic
+        let popped = 0;
+        function pop(el, word) {
+            if(el.innerText !== '🎈') return;
+            el.innerText = word;
+            el.style.background = '#e8a0bf';
+            el.style.color = '#fff';
+            el.style.border = 'none';
+            popped++;
+            document.getElementById('popCount').innerText = popped + " / 4 popped";
+            if(popped === 4) {
+                document.getElementById('finalBalloonText').style.display = 'block';
+                document.getElementById('balNextBtn').style.display = 'inline-block';
+                confetti();
             }
         }
+
+        // Scratch Card Logic (Touch Scroll Fixed)
+        function initScratch() {
+            const canvas = document.getElementById('scratchCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#d4af37';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#fff';
+            ctx.font = '14px Poppins';
+            ctx.fillText('Scratch to discover', 60, 95);
+
+            let isDrawing = false;
+            function scratch(e) {
+                if(!isDrawing) return;
+                e.preventDefault(); // Prevents mobile screen scrolling while scratching
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                const x = clientX - rect.left;
+                const y = clientY - rect.top;
+                
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(x, y, 20, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            canvas.addEventListener('mousedown', () => isDrawing = true);
+            canvas.addEventListener('mouseup', () => isDrawing = false);
+            canvas.addEventListener('mousemove', scratch);
+            canvas.addEventListener('touchstart', (e) => { isDrawing = true; e.preventDefault(); }, {passive: false});
+            canvas.addEventListener('touchend', () => isDrawing = false);
+            canvas.addEventListener('touchmove', scratch, {passive: false});
+        }
+
+        // Quiz Logic
+        let currQ = 1;
+        function qAns() {
+            currQ++;
+            if(currQ === 2) {
+                document.getElementById('qNum').innerText = "QUESTION 2 OF 3";
+                document.getElementById('qText').innerText = "What is my favorite thing about you?";
+                document.getElementById('quizOpts').innerHTML = `
+                    <div class="quiz-option" onclick="qAns()">A. Your smile</div>
+                    <div class="quiz-option" onclick="qAns()">B. Your kindness</div>
+                    <div class="quiz-option" onclick="qAns()">C. Your eyes</div>
+                    <div class="quiz-option" onclick="qAns()">D. Everything</div>
+                `;
+            } else if(currQ === 3) {
+                document.getElementById('qNum').innerText = "QUESTION 3 OF 3";
+                document.getElementById('qText').innerText = "What is my favorite notification?";
+                document.getElementById('quizOpts').innerHTML = `
+                    <div class="quiz-option" onclick="qAns()">A. Instagram</div>
+                    <div class="quiz-option" onclick="qAns()">B. WhatsApp</div>
+                    <div class="quiz-option" onclick="qAns()">C. Your Message</div>
+                    <div class="quiz-option" onclick="qAns()">D. Email</div>
+                `;
+            } else {
+                nextScreen(9); // Quiz over, go to Slider
+            }
+        }
+
+        // Image Slider Logic
+        const imgs = ['Snapchat-1673317709.jpg', 'Snapchat-508659567.jpg', 'Snapchat-665326094.jpg', 'Snapchat-667221974.jpg'];
+        let idx = 0;
+        function nextImg() { idx = (idx + 1) % imgs.length; document.getElementById('slideImg').src = imgs[idx]; }
+        function prevImg() { idx = (idx - 1 + imgs.length) % imgs.length; document.getElementById('slideImg').src = imgs[idx]; }
     </script>
 </body>
 </html>
