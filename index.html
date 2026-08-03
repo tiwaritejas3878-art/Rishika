@@ -78,16 +78,23 @@
         }
         .btn-custom:active { transform: scale(0.95); }
 
-        /* Polaroid Frame */
+        /* Polaroid Frame Fixed Overflow for ALL instances */
         .polaroid {
             background: white;
             padding: 12px 12px 25px 12px;
-            border-radius: 4px;
+            border-radius: 6px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             margin: 15px auto;
             position: relative;
+            box-sizing: border-box;
         }
-        .polaroid img { width: 100%; border-radius: 2px; height: 260px; object-fit: cover; }
+        .polaroid img { 
+            width: 100%; 
+            height: 240px; 
+            object-fit: cover; /* This ensures the image crops perfectly to fit without stretching */
+            border-radius: 4px; 
+            display: block;
+        }
         .polaroid-caption { font-family: 'Sacramento', cursive; font-size: 1.6rem; margin-top: 10px; }
 
         /* Cake Screen */
@@ -107,16 +114,13 @@
         .letter-box li::before { content: "✨"; position: absolute; left: 0; top: -2px; font-size: 0.9rem; }
         
         /* Scratch Card */
-        .canvas-container { position: relative; width: 260px; height: 180px; margin: 15px auto; }
-        canvas { position: absolute; top: 0; left: 0; border-radius: 15px; cursor: pointer; touch-action: none; }
-        .scratch-content { width: 100%; height: 100%; background-size: cover; background-position: center; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; text-align: center; font-size: 0.85rem; padding: 10px; box-sizing: border-box; }
+        .canvas-container { position: relative; width: 260px; height: 180px; margin: 15px auto; overflow: hidden; border-radius: 15px; }
+        canvas { position: absolute; top: 0; left: 0; border-radius: 15px; cursor: pointer; touch-action: none; z-index: 2; }
+        .scratch-content { width: 100%; height: 100%; background-size: cover; background-position: center; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; text-align: center; font-size: 0.85rem; padding: 10px; box-sizing: border-box; position: absolute; top:0; left:0; z-index: 1; }
 
         /* Quiz */
         .quiz-option { background: #fff; border: 1px solid #eeded2; padding: 12px; border-radius: 15px; margin: 8px 0; text-align: left; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
         .quiz-option:active { background: #fdf0ed; transform: scale(0.98); }
-
-        /* Slider */
-        .slider img { width: 100%; height: 260px; object-fit: cover; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -124,9 +128,9 @@
     <!-- SCREEN 1: LOCK SCREEN -->
     <div id="s1" class="screen active">
         <div class="sub-header">🔒 A SURPRISE AWAITS</div>
-        <div class="polaroid" style="width: 180px; padding: 10px 10px 15px 10px;">
-            <img src="Snapchat-1673317709.jpg" style="height: 180px;">
-            <div class="polaroid-caption">Rishika</div>
+        <div class="polaroid" style="width: 170px; padding: 8px 8px 12px 8px;">
+            <img src="Snapchat-1673317709.jpg" style="height: 160px;">
+            <div class="polaroid-caption" style="font-size: 1.3rem;">Rishika</div>
         </div>
         <p style="font-size: 0.8rem; opacity: 0.8;">Enter the secret code to unlock 🗝️</p>
         <div id="passDots" style="letter-spacing: 5px; font-size: 1.2rem; margin-bottom: 10px;">⚪ ⚪ ⚪ ⚪</div>
@@ -186,7 +190,7 @@
         <button class="btn-custom" onclick="nextScreen(6)">Continue ✨</button>
     </div>
 
-    <!-- SCREEN 6: LETTER (THE MISSING PAGE ADDED) -->
+    <!-- SCREEN 6: LETTER -->
     <div id="s6" class="screen">
         <div class="sub-header">A LETTER JUST FOR YOU 💌</div>
         <h3 class="cursive" style="margin-bottom: 5px;">all the reasons</h3>
@@ -242,12 +246,13 @@
             <div class="polaroid-caption" style="font-size: 1.2rem;">this one — this is my favourite ✨</div>
         </div>
         <p style="font-size: 0.75rem; opacity: 0.6; margin-top: 15px;">👈 Tap to slide 👉</p>
-        <button class="btn-custom" onclick="prevImg()" style="padding: 10px 15px; font-size: 0.8rem;">Previous</button>
-        <button class="btn-custom" onclick="nextImg()" style="padding: 10px 15px; font-size: 0.8rem;">Next</button>
+        <div style="display: flex; justify-content: center; gap: 10px;">
+            <button class="btn-custom" onclick="prevImg()" style="padding: 10px 15px; font-size: 0.8rem;">Previous</button>
+            <button class="btn-custom" onclick="nextImg()" style="padding: 10px 15px; font-size: 0.8rem;">Next</button>
+        </div>
     </div>
 
     <script>
-        // Passcode Logic
         let inputPass = "";
         function press(num) {
             if(num === 'C') { inputPass = ""; }
@@ -260,15 +265,13 @@
             else { alert("Oops! Wrong code cutie. Try again! 😉"); inputPass = ""; press(''); }
         }
 
-        // Screen Navigation
         function nextScreen(n) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById('s' + n).classList.add('active');
             window.scrollTo(0, 0);
-            if(n === 7) initScratch(); // Trigger Scratch canvas only when Screen 7 opens
+            if(n === 7) initScratch();
         }
 
-        // Cake Blow Animation
         function blowCandle() {
             document.querySelectorAll('.flame').forEach(f => f.style.display = 'none');
             document.getElementById('cakeText').innerText = "Happy Birthday!";
@@ -277,7 +280,6 @@
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         }
 
-        // Balloon Pop Logic
         let popped = 0;
         function pop(el, word) {
             if(el.innerText !== '🎈') return;
@@ -294,7 +296,6 @@
             }
         }
 
-        // Scratch Card Logic (Touch Scroll Fixed)
         function initScratch() {
             const canvas = document.getElementById('scratchCanvas');
             const ctx = canvas.getContext('2d');
@@ -307,7 +308,7 @@
             let isDrawing = false;
             function scratch(e) {
                 if(!isDrawing) return;
-                e.preventDefault(); // Prevents mobile screen scrolling while scratching
+                e.preventDefault();
                 const rect = canvas.getBoundingClientRect();
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                 const clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -327,7 +328,6 @@
             canvas.addEventListener('touchmove', scratch, {passive: false});
         }
 
-        // Quiz Logic
         let currQ = 1;
         function qAns() {
             currQ++;
@@ -350,11 +350,10 @@
                     <div class="quiz-option" onclick="qAns()">D. Email</div>
                 `;
             } else {
-                nextScreen(9); // Quiz over, go to Slider
+                nextScreen(9);
             }
         }
 
-        // Image Slider Logic
         const imgs = ['Snapchat-1673317709.jpg', 'Snapchat-508659567.jpg', 'Snapchat-665326094.jpg', 'Snapchat-667221974.jpg'];
         let idx = 0;
         function nextImg() { idx = (idx + 1) % imgs.length; document.getElementById('slideImg').src = imgs[idx]; }
